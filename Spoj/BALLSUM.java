@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
+/*
+ * The total ways to choose two numbers is nCr(N, 2)
+ * The number of ways to have summation equals to exactly k is (k-1)/2
+ * The number of ways to have summation <= k is to have summation = {1,2,3,...,k} = (0 + 0 + 1 + 1 + 2 + 2 + 3 + 3 + ... + (k-1)/2 + (k-1)/2)
+ */
 public class BALLSUM
 {
 	public static void main(String[] args) throws NumberFormatException, IOException

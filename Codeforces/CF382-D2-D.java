@@ -12,7 +12,13 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 /*
- * 
+ * First we check if there is a cycle we print -1
+ * If there is no cycles we get length of each path
+ * if the length of longest path is n then we can always have solution = 2*n-1 (putting soldier on start of path and another one one step ahead)
+ * if we can find two non intersecting paths of length n then answer is 2*n else answer = 2*n-1
+ * When calculating length of path we can do it recursively but this may cause problems with java (stack overflow)
+ * We can calculate is using queue instead. Path to all hashes is zero. We add hashes to queue with cost zero. At every step we remove cell from queue
+ * if any of the adjacent cells can go to this cell then cost of neighbor cell = cost of current cell + 1
  */
 public class CF382D
 {
