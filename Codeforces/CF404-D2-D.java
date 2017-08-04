@@ -9,6 +9,12 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 
+/*
+ * In dp state we keep last character, and at which index we are. If the current state is invalid return 0
+ * if current index is ? we try to put 0 1 2
+ * If the we are in state where last is '*' and we want to put 2 in current cell, It is equivalent to state (1,ind+1) as the two already got one of two mines before it.
+ */
+
 public class R4D
 {
 	static int mod = 1000000007, n;
