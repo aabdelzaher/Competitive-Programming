@@ -1,83 +1,90 @@
-package supervision;
-
 import java.util.Arrays;
 
 /*
- * for each state i we compute what is the next state j that this sequence of states from i to j is unique
- * if at any state no sequence from i to j is unique then output -1
- * the result is maximum of moving from i to j + moving from j to target
+ * We can try all possible assignments of rooks by backtracking
+ * we keep state ind which represent which row we are at. We try to put a rook in every valid column mark it as invalid and move to next row
+ * while moving we keep track of squares that are not special so we can calculate number of special squares once we reach base case
+ * Every rook adds all columns to its left and itself as non-special cells, and also every square above it that have not been marked by another rook yet.
  */
 
-public class SimpleIO
+public class WeirdRooks
 {
-	static char[] arr;
-	static int[] move;
+	static boolean[] valid;
+	static int bad;
+	static int rooks;
+	static int[] arr;
+	static int n, total;
+	
 	public static void main(String[] args)
 	{
-		System.out.println(worstCase("BBNNBNBBBBNBBBBBB", 3));
+		int[] test = {10, 10, 10, 10, 10, 10, 10, 10};
+		System.out.println(describe(test));
 	}
 	
-	public static int worstCase(String pattern, int targetState)
+	public static String describe(int[] cols)
 	{
-		arr = pattern.toCharArray();
-		move = new int[arr.length];
-		Arrays.fill(move, -1);
-		for (int i = 0; i < arr.length; i++)
-		{
-			boolean found = false;
-			int len = 1;
-			for (len = 1; len < arr.length; len++)
+		arr = cols;
+		n = cols.length;
+		valid = new boolean[cols[n-1]];
+		Arrays.fill(valid, true);
+		for (int i = 0; i < cols.length; i++)
+			total += cols[i];
+		rows = new int[n];
+		Arrays.fill(rows, -1);
+		solve(0);
+		StringBuilder sb = new StringBuilder();
+		int fst = 0;
+		for (int i = 0; i < res.length; i++)
+			for (int j = 0; j < res[i].length; j++)
 			{
-				found = found(i, len);
-				if(!found)
-					break;
+				
+				if(res[i][j])
+				{
+					if(fst == 0)
+						fst++;
+					else
+						sb.append(" ");
+					sb.append(i+","+j);
+				}
 			}
-			if(!found)
-				move[i] = len;
-		}
-		
-		for (int i = 0; i < move.length; i++)
-			if(move[i] == -1)
-				return -1;
-		
-		int max = 0;
-		for (int i = 0; i < move.length; i++)
-		{
-			int sum = move[(i+1)%move.length];
-			int nwind = i + move[(i+1)%move.length];
-			nwind %= arr.length;
-			sum += (targetState - nwind + arr.length)%arr.length;
-			max = Math.max(sum, max);
-		}
-		return max;
+		return sb.toString();
 	}
 	
-	public static boolean found(int i, int len)
+	static boolean[][] res = new boolean[9][100];
+	static int[] rows;
+	static void solve(int ind)
 	{
-		int j = i+1;
-		int l = 0;
-		j %= arr.length;
-		int p1 = i, p2 = j; 
-		while(j != i)
+		if(ind == n)
 		{
-			if(arr[p1] == arr[p2])
+			res[rooks][total-bad] = true;
+			return;
+		}
+		
+		solve(ind+1);
+		for (int col = 0; col < arr[ind]; col++)
+		{
+			if(valid[col])
 			{
-				l++;
-				p1++;
-				p1 %= arr.length;
-				p2++;
-				p2 %= arr.length;						
-				if(l == len)
-					return true;
-			}
-			else
-			{
-				l = 0;
-				p1 = i;
-				j = (j+1)%arr.length;
-				p2 = j;
+				valid[col] = false;
+				int bef = rows[ind];
+				rows[ind] = col;
+				
+				int add = 0;
+				for (int j = 0; j < ind; j++)
+					if(col < arr[j] && col > rows[j])
+						add++;
+				
+				bad += col+1+add;
+				rooks++;
+				
+				solve(ind+1);
+				
+				rooks--;
+				bad = bad-col-1-add;
+				rows[ind] = bef;
+				valid[col] = true;
 			}
 		}
-		return false;
+		
 	}
 }
