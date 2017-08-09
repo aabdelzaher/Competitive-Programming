@@ -8,8 +8,8 @@ import java.util.StringTokenizer;
 /*
  * We use binary search. If news can be spread in time t, surely it can be spread in time > t.
  * To know if we can spread the news in time t. For every messenger we calculate the furthest distance he should be at (to hear from the previous one).
- * And also we calculate the furthest distance he can reach int time t. The messanger should be at the minimum of both distances.
- * If a messanger can not reach minimum of both distances within time t, then the nes can not be spread in time t and we try bigger t, else we try time less than t.
+ * And also we calculate the furthest distance he can reach in time t. The messenger should be at the minimum of both distances.
+ * If a messenger can not reach minimum of both distances within time t, then the news can not be spread in time t and we try bigger t, else we try time less than t.
  */
 public class GLASNICI
 {
